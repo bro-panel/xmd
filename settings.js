@@ -6,13 +6,13 @@ function convertToBool(text, fault = 'true') {
 }
 
 module.exports = {
-    SESSION_ID: process.env.SESSION_ID || "",
+    SESSION_ID: process.env.SESSION_ID || "lite~0jV2VTjQ#6sQDRMAlVnacRClR6KS1fJq0PiWB6taXCKPgsD8pIz0",
     // add your Session Id make sure it starts with lite~
 
     PREFIX: process.env.PREFIX || ".",
     // add your prefix for bot
 
-    BOT_NAME: process.env.BOT_NAME || "ʟɪᴛᴇ-xᴅ",
+    BOT_NAME: process.env.BOT_NAME || "𝐒𝙷𝙰𝙶𝙴𝙴 𝐌𝙳",
     // add bot name here for menu
 
     MODE: process.env.MODE || "public",
@@ -48,20 +48,16 @@ module.exports = {
     MENTION_REPLY: process.env.MENTION_REPLY || "false",
     // make true if want auto voice reply if someone mention you 
 
-    MENU_IMAGE_URL: process.env.MENU_IMAGE_URL || "https://files.catbox.moe/lm4a0b.jpg",
+    MENU_IMAGE_URL: process.env.MENU_IMAGE_URL || "https://i.ibb.co/39kWRqJs/320.jpg",
     // add custom menu and mention reply image url
 
-    ALIVE_IMG: process.env.ALIVE_IMG || "https://files.catbox.moe/lm4a0b.jpg",
+    ALIVE_IMG: process.env.ALIVE_IMG || "https://i.ibb.co/39kWRqJs/320.jpg",
     // add img for alive msg
 
     LIVE_MSG: process.env.LIVE_MSG || 
-`> ʙᴏᴛ ɪs sᴘᴀʀᴋɪɴɢ ᴀᴄᴛɪᴠᴇ ᴀɴᴅ ᴀʟɪᴠᴇ
+`> *🔐𝐏𝐨𝐰𝐞𝐫𝐝 𝐁𝐲 -: ©𝐒𝐇𝐀𝐆𝐄𝐄 𝐌𝐃  💚*
 
-ᴋᴇᴇᴘ ᴜsɪɴɢ ✦ʟɪᴛᴇ xᴅ✦ ғʀᴏᴍ ᴍᴀʟᴠɪɴ ᴛᴇᴄʜ ɪɴᴄ⚡
-
-*© ᴡʜᴀᴛꜱᴀᴘᴘ ʙᴏᴛ - ᴍᴅ*
-
-> ɢɪᴛʜᴜʙ : github.com/XdKing2/LITE-XD`,
+`,
     // add alive msg here 
 
     STICKER_NAME: process.env.STICKER_NAME || "ᴍᴀʟᴠɪɴ-xᴅ",
