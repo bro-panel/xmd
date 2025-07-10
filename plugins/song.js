@@ -1,4 +1,4 @@
-const config = require('../settings');
+/* const config = require('../settings');
 const { lite } = require('../lite');
 const DY_SCRAP = require('@dark-yasiya/scrap');
 const dy_scrap = new DY_SCRAP();
@@ -111,3 +111,4 @@ conn.ev.on("messages.upsert", async (msgUpdate) => {
         await conn.sendMessage(from, { text: `❌ Error: ${err.message || "Something went wrong!"}` }, { quoted: mek });
     }
 });
+*/
