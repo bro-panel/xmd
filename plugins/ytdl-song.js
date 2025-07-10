@@ -105,7 +105,7 @@ lite({
 
 //////////////===========
 
-const config = require('../settings');
+/*const config = require('../settings');
 const { cmd, commands } = require('../command');
 const axios = require('axios');
 
@@ -144,3 +144,4 @@ cmd({
     reply('❌ Unable to download the Facebook video. Please try again later.f');
   }
 });
+*/
