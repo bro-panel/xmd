@@ -1,4 +1,4 @@
-const config = require('../settings');
+/* const config = require('../settings');
 const { lite } = require('../lite');
 const DY_SCRAP = require('@dark-yasiya/scrap');
 const dy_scrap = new DY_SCRAP();
@@ -145,3 +145,108 @@ cmd({
   }
 });
 */
+*/
+    
+const { lite } = require('../lite');
+const config = require('../settings');
+const DY_SCRAP = require('@dark-yasiya/scrap');
+const dy_scrap = new DY_SCRAP();
+
+function replaceYouTubeID(url) {
+    const regex = /(?:youtube\.com\/(?:.*v=|.*\/)|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+}
+
+lite({
+    pattern: "song",
+    alias: ["s", "play"],
+    react: "🎵",
+    desc: "Download YouTube mp3 with buttons",
+    category: "download",
+    use: ".song <Text or YT URL>",
+    filename: __filename
+}, async (conn, m, mek, { from, q, reply }) => {
+    try {
+        if (!q) return await reply("❌ Please provide a YouTube query or URL!");
+
+        let id = q.startsWith("https://") ? replaceYouTubeID(q) : null;
+
+        if (!id) {
+            const searchResults = await dy_scrap.ytsearch(q);
+            if (!searchResults?.results?.length) return await reply("❌ No results found!");
+            id = searchResults.results[0].videoId;
+        }
+
+        const data = await dy_scrap.ytsearch(`https://youtube.com/watch?v=${id}`);
+        if (!data?.results?.length) return await reply("❌ Failed to fetch video!");
+
+        const { url, title, image, timestamp, ago, views, author } = data.results[0];
+
+        let info = `🎶 *Song Info* 🎶\n\n` +
+            `🎵 *Title:* ${title || "Unknown"}\n` +
+            `⏳ *Duration:* ${timestamp || "Unknown"}\n` +
+            `👀 *Views:* ${views || "Unknown"}\n` +
+            `🌍 *Uploaded:* ${ago || "Unknown"}\n` +
+            `👤 *Channel:* ${author?.name || "Unknown"}\n` +
+            `🔗 *URL:* ${url || "Unknown"}\n\n` +
+            `💾 *Choose format:*`;
+
+        const buttons = [
+            { buttonId: `audio_${id}`, buttonText: { displayText: "🎵 Audio" }, type: 1 },
+            { buttonId: `doc_${id}`, buttonText: { displayText: "📁 Document" }, type: 1 }
+        ];
+
+        await conn.sendMessage(from, {
+            image: { url: image },
+            caption: info,
+            buttons,
+            footer: config.FOOTER || "𝐒𝙷𝙰𝙶𝙴𝙴 𝐌𝙳",
+            headerType: 4
+        }, { quoted: mek });
+
+    } catch (err) {
+        console.error(err);
+        await reply(`❌ Error: ${err.message}`);
+    }
+});
+
+// Button actions handler
+lite({
+    on: "callback", // Handle all button press events
+    filename: __filename
+}, async (conn, m, mek, { body, from }) => {
+    try {
+        if (!body?.startsWith("audio_") && !body?.startsWith("doc_")) return;
+        const id = body.split("_")[1];
+        if (!id) return;
+
+        await conn.sendMessage(from, { text: "⏳ Downloading..." }, { quoted: mek });
+
+        const response = await dy_scrap.ytmp3(`https://youtube.com/watch?v=${id}`);
+        const downloadUrl = response?.result?.download?.url;
+        const title = response?.result?.title || "song.mp3";
+
+        if (!downloadUrl) return await conn.sendMessage(from, { text: "❌ Download link not found!" }, { quoted: mek });
+
+        if (body.startsWith("audio_")) {
+            await conn.sendMessage(from, {
+                audio: { url: downloadUrl },
+                mimetype: "audio/mpeg"
+            }, { quoted: mek });
+        } else {
+            await conn.sendMessage(from, {
+                document: { url: downloadUrl },
+                fileName: `${title}.mp3`,
+                mimetype: "audio/mpeg",
+                caption: title
+            }, { quoted: mek });
+        }
+
+        await conn.sendMessage(from, { text: "✅ Done!" }, { quoted: mek });
+
+    } catch (err) {
+        console.error(err);
+        await conn.sendMessage(from, { text: `❌ Error occurred: ${err.message}` }, { quoted: mek });
+    }
+});
