@@ -145,7 +145,7 @@ cmd({
   }
 });
 */
-*/
+
     
 const { lite } = require('../lite');
 const config = require('../settings');
